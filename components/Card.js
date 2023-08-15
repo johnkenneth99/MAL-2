@@ -1,7 +1,21 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaChartLine, FaRectangleList, FaLink, FaCirclePlay, FaHandBackFist, FaHatWizard, FaPiedPiperHat, FaHeart } from "react-icons/fa6";
-import { truncateText } from "@/functions/helpers";
+import Button from "./Button";
+import {
+  FaChartLine,
+  FaRectangleList,
+  FaLink,
+  FaCirclePlay,
+  FaHandBackFist,
+  FaHatWizard,
+  FaPiedPiperHat,
+  FaHeart,
+  FaMasksTheater,
+  FaGhost,
+} from "react-icons/fa6";
+
+import { GiUfo, GiDragonShield, GiTheaterCurtains } from "react-icons/gi";
+import { PiDetectiveFill, PiHandEyeFill } from "react-icons/pi";
 
 const TABS = {
   SUMMARY: 0,
@@ -14,21 +28,21 @@ export default function Card({ imageSource, episodes, genres, title, altTitle, s
   const [activeTab, setActiveTab] = useState(TABS.SUMMARY);
 
   return (
-    <div className="flex flex-row max-h-[250px] outline outline-1 outline-slate-300 m-5 rounded">
+    <div className="flex flex-row max-h-[250px] outline outline-1 outline-slate-300 rounded">
       <div className="relative min-w-[175px] max-w-[175px]">
         <Image src={imageSource} alt="Thumbnail" width={1920} height={1080} objectFit="contain" />
       </div>
       <nav role="tabList" className="flex flex-col align-center justify-between bg-primary text-white">
-        <button className="p-4 py-5 bg-accent" onClick={() => setActiveTab(TABS.SUMMARY)}>
+        <button className="p-4 hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
           <FaRectangleList size="1.5rem" />
         </button>
-        <button className="p-4 py-5" onClick={() => setActiveTab(TABS.STATS)}>
+        <button className="p-4 py-5 hover:bg-secondary" onClick={() => setActiveTab(TABS.STATS)}>
           <FaChartLine size="1.5rem" />
         </button>
-        <button className="p-4 py-5" onClick={() => setActiveTab(TABS.SUMMARY)}>
+        <button className="p-4 py-5 hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
           <FaCirclePlay size="1.5rem" />
         </button>
-        <button className="px-4 py-5" onClick={() => setActiveTab(TABS.SUMMARY)}>
+        <button className="p-4  hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
           <FaLink size="1.5rem" />
         </button>
       </nav>
@@ -45,6 +59,13 @@ const GENRE_ICONS = {
   ADVENTURE: <FaPiedPiperHat />,
   FANTASY: <FaHatWizard color="purple" />,
   ROMANCE: <FaHeart color="pink" />,
+  DRAMA: <GiTheaterCurtains color="brown" />,
+  COMEDY: <FaMasksTheater />,
+  HORROR: <FaGhost />,
+  SUSPENSE: <PiDetectiveFill />,
+  FANTASY: <GiDragonShield />,
+  SUPERNATURAL: <PiHandEyeFill />,
+  ["SCI-FI"]: <GiUfo />,
 };
 
 function Summary({ title, altTitle, synopsis, genres, episodes }) {
@@ -55,24 +76,19 @@ function Summary({ title, altTitle, synopsis, genres, episodes }) {
         <h2 className="text-sm text-slate-600">{altTitle.at(0)}</h2>
       </div>
       <div className="">
-        <p>
+        <p>{synopsis}</p>
+        {/* <p>
           <strong>Episodes:</strong> {episodes || "N/A"}
-        </p>
-        <span>
+        </p> */}
+        {/* <span>
           <strong>Genres:</strong>
           {!!genres.length &&
             genres.map(({ name }) => (
-              <button className="outline outline-1 outline-slate-300 rounded py-1 px-3 mx-1 m-2 hover:bg-secondary">
-                <div className="flex flex-row justify-center align-center">
-                  <span className="mt-1 mr-1">{GENRE_ICONS[name.toUpperCase()]}</span>
-                  <p>{name}</p>
-                </div>
-              </button>
+              <>
+                <Button icon={GENRE_ICONS[name.toUpperCase()]} label={name} />
+              </>
             ))}
-        </span>
-        <p>
-          <strong>Synopsis:</strong> {synopsis}
-        </p>
+        </span> */}
       </div>
     </>
   );
