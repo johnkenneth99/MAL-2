@@ -10,17 +10,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [animeList, setAnimeList] = useState(null);
-  const [count, setCount] = useState(0);
 
-  const { query } = useRouter();
+  const {
+    query: { page = 1 },
+  } = useRouter();
 
-  const { data } = useFetch(process.env.NEXT_PUBLIC_API_PATH.concat(API_ROUTES.SEASONS_NOW));
-
-  useEffect(() => {
-    if (data === null) return;
-
-    setAnimeList(data);
-  }, [data]);
+  const { data = null } = useFetch([page, process.env.NEXT_PUBLIC_API_PATH.concat(API_ROUTES.SEASONS_NOW)]);
 
   return (
     <main className={`w-full min-h-screen min-w-[640px] px-32 pb-10 bg-white ${inter.className}`}>

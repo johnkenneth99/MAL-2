@@ -2,20 +2,19 @@ import { useState, useEffect } from "react";
 import responseCodes from "@/constants/response-codes";
 import { useRouter } from "next/router";
 
-export default function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [arr1, setArr1] = useState([]);
-  const { push } = useRouter();
+export default function useFetch(params) {
+  const [result, setResult] = useState({});
 
   useEffect(() => {
     (async () => {
+      const [page, url] = params;
       const response = await fetch(url);
 
-      const { data: result } = await handleResponse(response);
+      const { data, pagination } = await handleResponse(response);
 
-      setData(result);
+      setResult({ data, pagination });
     })();
-  }, [url]);
+  }, [params]);
 
   const handleResponse = async (response) => {
     const { status, statusText } = response;
@@ -31,5 +30,5 @@ export default function useFetch(url) {
     return status !== responseCodes.OK;
   };
 
-  return { data };
+  return result;
 }

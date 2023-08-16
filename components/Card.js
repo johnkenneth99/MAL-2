@@ -16,6 +16,7 @@ import {
 
 import { GiUfo, GiDragonShield, GiTheaterCurtains } from "react-icons/gi";
 import { PiDetectiveFill, PiHandEyeFill } from "react-icons/pi";
+import classNames from "classnames";
 
 const TABS = {
   SUMMARY: 0,
@@ -27,22 +28,28 @@ const TABS = {
 export default function Card({ imageSource, episodes, genres, title, altTitle, synopsis, stats }) {
   const [activeTab, setActiveTab] = useState(TABS.SUMMARY);
 
+  const isSummary = activeTab === TABS.SUMMARY;
+  const isStats = activeTab === TABS.STATS;
+
+  const summaryClassName = classNames("p-4", { "bg-accent": isSummary }, { " hover:bg-secondary": !isSummary });
+  const statsClassName = classNames("p-4", { "bg-accent": isStats }, { " hover:bg-secondary": !isStats });
+
   return (
-    <div className="flex flex-row max-h-[250px] outline outline-1 outline-slate-300 rounded">
-      <div className="relative min-w-[175px] max-w-[175px]">
-        <Image src={imageSource} alt="Thumbnail" width={1920} height={1080} objectFit="contain" />
+    <div className="flex flex-row outline outline-1 outline-slate-300 rounded">
+      <div className="relative min-w-[175px] max-w-[175px] overflow-hidden">
+        <Image className="absolute" src={imageSource} alt="Thumbnail" width={1920} height={1080} />
       </div>
-      <nav role="tabList" className="flex flex-col align-center justify-between bg-primary text-white">
-        <button className="p-4 hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
+      <nav role="tabList" className="flex flex-col align-center bg-primary text-white">
+        <button className={summaryClassName} onClick={() => setActiveTab(TABS.SUMMARY)}>
           <FaRectangleList size="1.5rem" />
         </button>
-        <button className="p-4 py-5 hover:bg-secondary" onClick={() => setActiveTab(TABS.STATS)}>
+        <button className={statsClassName} onClick={() => setActiveTab(TABS.STATS)}>
           <FaChartLine size="1.5rem" />
         </button>
-        <button className="p-4 py-5 hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
+        <button className="p-4 py-5 hover:bg-secondary" onClick={() => setActiveTab(TABS.STREAM)}>
           <FaCirclePlay size="1.5rem" />
         </button>
-        <button className="p-4  hover:bg-secondary" onClick={() => setActiveTab(TABS.SUMMARY)}>
+        <button className="p-4  hover:bg-secondary" onClick={() => setActiveTab(TABS.LINKS)}>
           <FaLink size="1.5rem" />
         </button>
       </nav>
