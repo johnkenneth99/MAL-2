@@ -1,20 +1,38 @@
 import { useState, useEffect } from "react";
 import responseCodes from "@/constants/response-codes";
-import { useRouter } from "next/router";
 
-export default function useFetch(params) {
+export default function useFetch({ path = "", params = {} }) {
+  const [pathname, setPathname] = useState("");
   const [result, setResult] = useState({});
 
   useEffect(() => {
-    (async () => {
-      const [page, url] = params;
-      const response = await fetch(url);
+    handleFetch({ path, params });
+  }, [path]);
 
-      const { data, pagination } = await handleResponse(response);
+  const handleFetch = async ({ path = pathname, params = {} }) => {
+    const relativePath = buildPath(path, params);
 
-      setResult({ data, pagination });
-    })();
-  }, [params]);
+    const url = new URL(relativePath, process.env.NEXT_PUBLIC_BASE_URL);
+
+    const response = await fetch(url);
+
+    const data = await handleResponse(response);
+
+    setResult(data);
+    setPathname(path);
+  };
+
+  const buildPath = (path, params) => {
+    const currentPath = process.env.NEXT_PUBLIC_BASE_PATH.concat(path);
+
+    return !isNull(params) ? appendParams(currentPath, params) : currentPath;
+  };
+
+  const appendParams = (path, paramObject) => {
+    const params = new URLSearchParams(paramObject);
+
+    return `${path}?${params}`;
+  };
 
   const handleResponse = async (response) => {
     const { status, statusText } = response;
@@ -30,5 +48,9 @@ export default function useFetch(params) {
     return status !== responseCodes.OK;
   };
 
-  return result;
+  const isNull = (variable) => {
+    return variable === null || Object.keys(variable).length === 0;
+  };
+
+  return { result, mutate: handleFetch };
 }

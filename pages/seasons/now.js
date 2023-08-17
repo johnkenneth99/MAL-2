@@ -12,15 +12,34 @@ export default function Home() {
   const [animeList, setAnimeList] = useState(null);
 
   const {
-    query: { page = 1 },
+    query: { page },
   } = useRouter();
 
-  const { data = null } = useFetch([page, process.env.NEXT_PUBLIC_API_PATH.concat(API_ROUTES.SEASONS_NOW)]);
+  const {
+    result: { data, pagination },
+    mutate,
+  } = useFetch({ path: API_ROUTES.SEASONS_NOW });
 
   return (
     <main className={`w-full min-h-screen min-w-[640px] px-32 pb-10 bg-white ${inter.className}`}>
       <div className="flex justify-center w-full bg-primary">
         <h1 className="text-white text-2xl font-medium p-3">Upcoming Anime</h1>
+      </div>
+      <div className="flex gap-x-5 my-5">
+        <button
+          disabled={pagination?.current_page === 1}
+          className="text-white text-lg font-bold w-full bg-accent"
+          onClick={() => mutate({ params: { page: pagination.current_page - 1 } })}
+        >
+          Back
+        </button>
+        <button
+          disabled={!pagination?.has_next_page}
+          className="text-white text-lg font-bold w-full bg-accent"
+          onClick={() => mutate({ params: { page: pagination.current_page + 1 } })}
+        >
+          Next
+        </button>
       </div>
       <div className="flex flex-wrap justify-start w-full bg-white my-2">
         {FILTERS.map(({ label, value }, index) => (
