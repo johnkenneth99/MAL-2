@@ -14,7 +14,7 @@ export default function Home() {
 
   const { query } = useRouter();
 
-  const { data } = useFetch(process.env.NEXT_PUBLIC_API_PATH.concat(API_ROUTES.SEASONS_NOW));
+  const { data } = useFetch(process.env.NEXT_PUBLIC_BASE_URL.concat(API_ROUTES.SEASONS_NOW));
 
   useEffect(() => {
     if (data === null) return;
